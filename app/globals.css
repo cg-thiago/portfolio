@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 241, 241, 241;
+  --background-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+@layer components {
+  .nav-link {
+    @apply rounded-lg bg-[#FAFAFA] border border-white/10 px-6 py-2.5 text-dark hover:bg-opacity-90 transition-all;
+  }
+}
+
+.fadein-video { opacity: 0; }
+.fadein-video.opacity-100 { opacity: 1; transition: opacity 1s; } 
