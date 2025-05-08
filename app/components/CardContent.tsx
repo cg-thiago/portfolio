@@ -1,8 +1,7 @@
 import React from 'react';
-import { CardType } from '../types';
 
 interface CardContentProps {
-  type: CardType;
+  type: string;
   expanded: boolean;
 }
 
