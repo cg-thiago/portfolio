@@ -258,14 +258,16 @@ export default function Toolbar() {
     <>
       <NavigationOverlay isOpen={isOpen} />
       <div className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2">
-        <div
-          className={`relative flex w-[520px] max-w-full items-center justify-between gap-[24px] rounded-2xl border border-white/10 bg-dark px-6 py-4 cursor-pointer transition-all duration-500 translate-y-0 opacity-100 scale-100 pointer-events-auto
+        <nav
+          className={`relative flex w-full max-w-[520px] sm:max-w-[600px] lg:max-w-[720px] items-center justify-between gap-3 sm:gap-6 rounded-2xl border border-white/10 bg-dark px-2 sm:px-4 md:px-6 py-3 sm:py-4 cursor-pointer transition-all duration-500 translate-y-0 opacity-100 scale-100 pointer-events-auto
             ${isHovered ? 'ring-2 ring-[#EB4700]/40 border-[#EB4700] scale-105 shadow-[0_0_24px_0_rgba(235,71,0,0.18)]' : ''}`}
+          role="navigation"
+          aria-label="Main toolbar navigation"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={handleToolbarClick}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <DynamicToolbarContent
               isHovered={isHovered}
               scrollFeedback={scrollFeedback}
@@ -281,7 +283,7 @@ export default function Toolbar() {
           >
             <DropdownMenu />
           </div>
-        </div>
+        </nav>
       </div>
       <style jsx global>{`
         .animate-blink { animation: blink 1s steps(2, start) infinite; }
@@ -364,10 +366,12 @@ function DropdownMenu() {
   return (
     <div className="relative" ref={menuRef}>
       <button
-        className="flex items-center h-10 gap-2 rounded-xl bg-transparent hover:bg-white/5 transition-colors focus:outline-none px-2 flex-shrink-0 min-w-[120px]"
+        className="flex items-center h-10 gap-2 rounded-xl bg-transparent hover:bg-white/5 transition-colors focus:outline-none focus:ring-2 focus:ring-[#EB4700] focus:ring-offset-2 px-2 flex-shrink-0 min-w-[100px] sm:min-w-[120px]"
         onClick={() => setOpen(open => !open)}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-controls="toolbar-dropdown-menu"
+        aria-label="Open navigation menu"
         style={{minWidth: 0}}
         onMouseEnter={() => {
           setHoverText('');
@@ -387,14 +391,14 @@ function DropdownMenu() {
         </span>
       </button>
       {open && (
-        <div className="absolute left-0 bottom-14 min-w-[200px] z-50 bg-dark rounded-2xl shadow-lg border border-white/10 py-2 animate-fadeInUp" style={{marginBottom: '4px'}} role="listbox">
+        <div id="toolbar-dropdown-menu" className="absolute left-0 bottom-14 min-w-[160px] sm:min-w-[200px] z-50 bg-dark rounded-2xl shadow-lg border border-white/10 py-2 animate-fadeInUp" style={{marginBottom: '4px'}} role="listbox">
           {/* Grupo de links internos */}
           <div className="overflow-hidden rounded-t-2xl">
             {internalLinks.map((link, idx) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className={`block px-4 py-2 text-sm ${
+                className={`block px-3 sm:px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#EB4700] focus:ring-offset-2 ${
                   pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
                     ? 'bg-white/10 text-white'
                     : 'text-gray-300 hover:bg-white/5 hover:text-white'
@@ -423,7 +427,7 @@ function DropdownMenu() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center h-12 gap-3 w-full px-3 text-white text-[16px] font-normal cursor-pointer transition-colors focus:outline-none
+                className={`flex items-center h-12 gap-2 sm:gap-3 w-full px-2 sm:px-3 text-white text-[16px] font-normal cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[#EB4700] focus:ring-offset-2
                   hover:bg-white/10
                   ${idx === 0 ? 'rounded-t-xl' : ''}
                   ${idx === externalLinks.length - 1 ? 'rounded-b-2xl' : ''}`}

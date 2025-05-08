@@ -25,6 +25,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${gasoek.variable}`}>
+      <head>
+        <link rel="icon" href="/images/favico.svg" type="image/svg+xml" />
+      </head>
       <body className="font-inter bg-black text-light">
         <ToolbarProvider>
           {children}
