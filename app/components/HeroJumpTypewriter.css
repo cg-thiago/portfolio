@@ -1,0 +1,39 @@
+.herojump-container {
+  width: 100%;
+  text-align: center;
+  font-family: 'Gasoek One', sans-serif;
+  line-height: 1.1;
+}
+
+.herojump-line {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.herojump-word {
+  display: inline-block;
+  /* opacity: 0; */
+  /* transform: translateY(60px) scale(0.7); */
+  position: relative;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+.herojump-word-gsap {
+  /* GSAP anima tudo */
+}
+
+.herojump-cursor {
+  display: inline-block;
+  margin-left: 0.2em;
+  font-size: 0.9em;
+  color: #E74600;
+  font-weight: bold;
+  animation: herojump-blink 1s steps(1) infinite;
+  vertical-align: middle;
+}
+
+@keyframes herojump-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+} 

@@ -1,0 +1,54 @@
+.timelineTitle {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #ededed;
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.01em;
+  word-break: break-word;
+  overflow: hidden;
+  line-height: 1.35;
+  font-family: 'Inter', sans-serif;
+}
+.timelineMeta {
+  font-size: 1.05rem;
+  color: #b3b3b3;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  word-break: break-word;
+  overflow: hidden;
+}
+.timelineCard {
+  min-width: 320px;
+  max-width: 420px;
+  padding: 1.75rem 1.5rem;
+  background: #18181b;
+  border-radius: 1.25rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+@media (max-width: 700px) {
+  .timelineCard {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 1.1rem 0.7rem;
+    margin-bottom: 1.1rem;
+    border-radius: 1rem;
+    box-shadow: none;
+  }
+  .timelineTitle {
+    font-size: 1.05rem;
+    line-height: 1.35;
+    margin-bottom: 0.4rem;
+    font-family: 'Inter', sans-serif;
+  }
+  .timelineMeta {
+    font-size: 0.97rem;
+    line-height: 1.6;
+    gap: 0.15rem;
+  }
+}

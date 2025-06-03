@@ -1,0 +1,208 @@
+/* ExpertiseCarousel.module.css */
+
+.carouselSection {
+  display: block !important;
+  min-height: 220px;
+  width: 100%;
+  margin: 4rem auto 4rem auto;
+  padding: 3rem 0 2rem 0;
+  background: none;
+  border-radius: 1rem;
+  box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+}
+
+.carouselTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #e5e5e5;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.01em;
+}
+
+.carouselWrapper {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+.carousel {
+  display: flex !important;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: flex-start;
+  align-items: stretch;
+  min-width: 100%;
+}
+
+.card {
+  display: flex !important;
+  background: #1e1e22;
+  border: 1.5px solid #232329;
+  border-radius: 0.75rem;
+  min-width: 320px;
+  max-width: 340px;
+  padding: 2rem 1.5rem;
+  flex-direction: column;
+  gap: 1.25rem;
+  box-shadow: none;
+  transition: border 0.2s, background 0.2s;
+  color: #ededed;
+}
+
+.cardTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ededed;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.cardDescription {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #b3b3b3;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .carousel {
+    gap: 1.25rem;
+  }
+  .card {
+    min-width: 240px;
+    max-width: 260px;
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel {
+    gap: 0.75rem;
+  }
+  .card {
+    min-width: 180px;
+    max-width: 200px;
+    padding: 1rem 0.5rem;
+  }
+  .carouselTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+.carouselNavWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.carouselArrow {
+  background: rgba(30,30,34,0.92);
+  border: 1.5px solid #232329;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s, border 0.18s;
+  z-index: 2;
+  position: relative;
+  box-shadow: none;
+}
+.carouselArrowLeft {
+  margin-right: 0.5rem;
+}
+.carouselArrowRight {
+  margin-left: 0.5rem;
+}
+.carouselArrow:hover {
+  background: #232329;
+  border-color: #b3b3b3;
+}
+
+@media (max-width: 600px) {
+  .carouselArrow {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+.edgeArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  opacity: 0.85;
+}
+.edgeArrowLeft {
+  left: 0;
+  padding-left: 0.5rem;
+  cursor: url('data:image/svg+xml;utf8,<svg fill="black" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><path d="M20 28L12 20L20 12" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'), pointer;
+}
+.edgeArrowRight {
+  right: 0;
+  padding-right: 0.5rem;
+  cursor: url('data:image/svg+xml;utf8,<svg fill="black" xmlns="http://www.w3.org/2000/svg" width="32" height="32"><path d="M12 12L20 20L12 28" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'), pointer;
+}
+.edgeArrow:hover svg {
+  filter: drop-shadow(0 2px 8px #0008);
+}
+
+.carouselNoScroll {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .carouselNoScroll {
+    gap: 1.25rem;
+  }
+  .card {
+    min-width: 260px;
+    max-width: 320px;
+    padding: 1.25rem 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .carouselNoScroll {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 0.75rem;
+  }
+  .card {
+    min-width: 200px;
+    max-width: 240px;
+    padding: 1rem 0.5rem;
+  }
+}
+
+.carouselScrollIndicator {
+  position: absolute;
+  left: 50%;
+  bottom: 0.5rem;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #232329 0%, #b3b3b3 50%, #232329 100%);
+  opacity: 0.7;
+  z-index: 10;
+  pointer-events: none;
+} 

@@ -1,11 +1,14 @@
 "use client";
 import Image from 'next/image'
 import VideoOverlay from './components/VideoOverlay'
-import Toolbar from './components/Toolbar'
 import Grid from './components/Grid'
-import HeroVideo from './components/HeroVideo'
-import { useMemo, useRef } from 'react'
-import { useToolbar } from './components/ToolbarContext'
+import HeroJumpTypewriter from './components/HeroJumpTypewriter'
+import { useMemo, useRef, useState, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import TypewriterHero from './components/TypewriterHero'
+import FloatingToolbar from './components/FloatingToolbar'
+import NavigationOverlay from './components/NavigationOverlay'
+import dynamic from 'next/dynamic'
 
 const VIDEOS = [
   {
@@ -26,101 +29,122 @@ const VIDEOS = [
   }
 ]
 
+const FONTS = [
+  'var(--font-gasoek)',
+  'var(--font-inter)',
+  'Roboto Mono, monospace',
+  'Orbitron, sans-serif',
+  'Indie Flower, cursive',
+];
+
+const VIDEO_SRC = '/images/freediving.webm';
+
 export default function Home() {
-  const { src, call } = useMemo(() => {
-    const idx = Math.floor(Math.random() * VIDEOS.length)
-    return VIDEOS[idx]
-  }, [])
-  const gridRef = useRef(null)
-  const { setHoverText, getFeedbackText } = useToolbar();
+  const [videoIdx, setVideoIdx] = useState(0);
+  const router = useRouter();
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false)
 
-  // Parallax effect + zoom
-  if (typeof window !== 'undefined') {
-    window.addEventListener('scroll', () => {
-      const hero = document.getElementById('hero-section')
-      const video = document.getElementById('hero-video')
-      if (hero && video) {
-        const scrollY = window.scrollY
-        if (window.innerWidth >= 1024) {
-          const scale = 1 + Math.min(scrollY / 1800, 0.22)
-          video.style.transform = `translateY(${scrollY * 0.25}px) scale(${scale})`
-        } else {
-          video.style.transform = `translateY(${scrollY * 0.25}px) scale(1)`
-        }
-      }
-    })
-  }
+  // Memoize video source to prevent unnecessary re-renders
+  const src = useMemo(() => VIDEOS[videoIdx].src, [videoIdx]);
 
-  // Função de scroll suave com easing
-  function smoothScrollTo(targetY, duration = 900) {
-    const startY = window.scrollY;
-    const diff = targetY - startY;
-    let start = null;
-    function easeInOutQuad(t) {
-      return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-    }
-    function step(timestamp) {
-      if (!start) start = timestamp;
-      const elapsed = timestamp - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const ease = easeInOutQuad(progress);
-      window.scrollTo(0, startY + diff * ease);
-      if (progress < 1) {
-        window.requestAnimationFrame(step);
+  // Handle scroll to work page
+  useEffect(() => {
+    let triggered = false;
+    function handleScroll() {
+      if (!triggered && window.scrollY > 30) {
+        triggered = true;
+        router.push('/work');
       }
     }
-    window.requestAnimationFrame(step);
-  }
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [router]);
 
-  const handleScrollToGrid = () => {
-    if (gridRef.current) {
-      const rect = gridRef.current.getBoundingClientRect();
-      const targetY = rect.top + window.scrollY - 24; // ajuste para respiro
-      smoothScrollTo(targetY);
+  // Atalhos de teclado
+  const handleKeyDown = useCallback((e) => {
+    if (e.key.toLowerCase() === 'h') {
+      router.push('/');
     }
-  }
+    if (e.key.toLowerCase() === 'w') {
+      router.push('/work');
+    }
+    if (e.key.toLowerCase() === 'a') {
+      router.push('/about');
+    }
+    if (e.key.toLowerCase() === 'b') {
+      window.open('https://cal.com/thiagopinto', '_blank');
+    }
+    if (e.key.toLowerCase() === 'l') {
+      window.open('https://www.linkedin.com/in/thiagopinto/', '_blank');
+    }
+  }, [router]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  const navigationItems = [
+    { name: 'Home', href: '/' },
+    { name: 'Work', href: '/work' },
+    { name: 'Contact', href: '/contact' },
+  ]
 
   return (
-    <main className="relative min-h-screen w-full overflow-x-hidden bg-black" role="main">
-      {/* Hero Section */}
-      <section id="hero-section" className="relative w-full min-h-[55vh] lg:min-h-screen flex flex-col items-center justify-start lg:justify-center pt-8 pb-4 sm:pt-16 sm:pb-8 lg:pt-0 lg:pb-0 overflow-hidden px-2 sm:px-4 md:px-8">
-        {/* Parallax Video Background */}
-        <div className="absolute inset-0 z-0 bg-black pointer-events-none will-change-transform h-full w-full">
-          <HeroVideo src={src} />
-          <VideoOverlay />
+    <div className="w-screen h-screen flex items-center justify-center bg-black relative overflow-hidden">
+      {/* Background video ocupa a tela toda */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster="/images/hero-fallback.jpg"
+        className="fixed inset-0 w-full h-full object-cover mix-blend-luminosity opacity-40 z-0 pointer-events-none"
+      >
+        <source src={VIDEO_SRC} type="video/webm" />
+      </video>
+      {/* Conteúdo centralizado */}
+      <div className="w-full max-w-[95vw] min-h-screen px-2 sm:px-0 relative z-10 overflow-hidden flex flex-col items-center justify-center">
+        {/* Importa a fonte Gasoek One no head */}
+        <link href="https://fonts.googleapis.com/css2?family=Gasoek+One&display=swap" rel="stylesheet" />
+        {/* Hero centralizado */}
+        <div className="w-full flex justify-center px-2">
+          <HeroJumpTypewriter
+            text={`Design is the surface.\nExperience is\nthe story beneath it.`}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-gasoek text-[#eb4700] text-center leading-tight uppercase w-full max-w-[95vw] mx-auto"
+            style={{
+              fontWeight: 'bold',
+              lineHeight: 1.1,
+              marginTop: 0,
+              marginBottom: 0,
+              position: 'static',
+              left: 'unset',
+              top: 'unset',
+              transform: 'none',
+              width: '100%'
+            }}
+          />
         </div>
-        {/* Hero Text */}
-        <div className="relative z-10 flex flex-col items-center w-full px-2 sm:px-4 h-full justify-center">
-          <h1 className="text-center font-gasoek text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-normal uppercase leading-tight text-[#EB4700] whitespace-pre-line mb-2 sm:mb-6 drop-shadow-xl">
-            {call}
-          </h1>
-          {/* Texto pequeno abaixo do call e acima da seta */}
-          <p className="text-xs sm:text-sm md:text-base text-gray-200 mb-2 sm:mb-4 text-center max-w-xs sm:max-w-md">
-            Design is how I explore, connect, and simplify. I'm Thiago, and this is my space to shape ideas.
-          </p>
-          {/* Down Arrow logo abaixo do texto */}
-          <button
-            onClick={handleScrollToGrid}
-            className="mt-4 sm:mt-8 z-20 animate-bounce bg-black/70 rounded-full p-4 sm:p-3 border border-white/10 hover:bg-black/80 transition focus:outline-none focus:ring-2 focus:ring-[#EB4700] focus:ring-offset-2"
-            aria-label="Scroll to portfolio grid"
-            tabIndex={0}
-            onMouseEnter={() => { setHoverText(''); setTimeout(() => setHoverText(getFeedbackText('home-hero-arrow')), 10); }}
-            onMouseLeave={() => setHoverText('')}
-          >
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-            <span className="sr-only">Ver portfólio</span>
-          </button>
+        {/* Atalhos logo abaixo */}
+        <div className="mt-10 md:mt-40 flex-col items-center justify-center gap-2 text-xs sm:text-sm text-white/60 font-mono select-none hidden md:flex">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <span className="home-shortcut flex items-center gap-1 cursor-pointer" onClick={() => router.push('/') } style={{ cursor: 'pointer' }}><span className="inline-block px-1 py-0.5 rounded bg-white/10 text-white">H</span> home</span>
+            <span className="home-shortcut flex items-center gap-1 cursor-pointer" onClick={() => router.push('/work')} style={{ cursor: 'pointer' }}><span className="inline-block px-1 py-0.5 rounded bg-white/10 text-white">W</span> work</span>
+            <span className="home-shortcut flex items-center gap-1 cursor-pointer" onClick={() => router.push('/about')} style={{ cursor: 'pointer' }}><span className="inline-block px-1 py-0.5 rounded bg-white/10 text-white">A</span> about</span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <span className="home-shortcut flex items-center gap-1 cursor-pointer" onClick={() => window.open('https://cal.com/thiagopinto', '_blank')} style={{ cursor: 'pointer' }}><span className="inline-block px-1 py-0.5 rounded bg-white/10 text-white">B</span> book a call</span>
+            <span className="home-shortcut flex items-center gap-1 cursor-pointer" onClick={() => window.open('https://www.linkedin.com/in/thiagopinto/', '_blank')} style={{ cursor: 'pointer' }}><span className="inline-block px-1 py-0.5 rounded bg-white/10 text-white">L</span> linkedin</span>
+          </div>
         </div>
-      </section>
+      </div>
 
-      {/* Grid Section abaixo da hero */}
-      <section ref={gridRef} className="relative z-10 w-full max-w-4xl mx-auto mt-8 sm:mt-16 flex flex-col items-center px-2 sm:px-4">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 md:mb-4 text-center">You're in Control.</h1>
-        <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 md:mb-10 text-center max-w-xs sm:max-w-xl md:max-w-2xl">
-          Drag. Drop. Resize. This portfolio adapts to your perspective — because good design puts the user in charge.
-        </p>
-        <Grid />
-      </section>
-    </main>
-  )
+      {/* Navigation Overlay */}
+      <NavigationOverlay 
+        isOpen={isOverlayOpen}
+        onClose={() => setIsOverlayOpen(false)}
+        navigationItems={navigationItems}
+      />
+    </div>
+  );
 } 

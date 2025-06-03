@@ -2,7 +2,6 @@
 import React, { useState, ReactElement, isValidElement, cloneElement } from "react";
 import { ExpandIcon, ShrinkIcon } from "lucide-react";
 import { getFeedbackText } from '../utils/feedbackText';
-import { useToolbar } from '../components/ToolbarContext';
 
 export default function ResizableCard({
   children,
@@ -12,7 +11,6 @@ export default function ResizableCard({
   defaultSize?: "small" | "large";
 }) {
   const [expanded, setExpanded] = useState(defaultSize === "large");
-  const { setHoverText } = useToolbar();
 
   // Função utilitária para extrair o ícone do filho
   function extractIcon(child: React.ReactNode): React.ReactNode {
@@ -70,11 +68,6 @@ export default function ResizableCard({
         onClick={() => setExpanded((v) => !v)}
         aria-label={expanded ? "Shrink" : "Expand"}
         type="button"
-        onMouseEnter={() => {
-          setHoverText('');
-          setTimeout(() => setHoverText(getFeedbackText(expanded ? 'collapse' : 'expand')), 10);
-        }}
-        onMouseLeave={() => setHoverText('')}
       >
         {expanded ? <ShrinkIcon size={18} /> : <ExpandIcon size={18} />}
       </button>

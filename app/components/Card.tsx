@@ -3,7 +3,6 @@ import { CardData, CardSize } from '../types';
 import { ExpandIcon, ShrinkIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useToolbar } from './ToolbarContext';
 import { getFeedbackText } from '../utils/feedbackText';
 
 interface CardProps {
@@ -13,7 +12,6 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ data, onSizeChange }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const { setHoverText } = useToolbar();
   const [isClient, setIsClient] = useState(false);
 
   const handleToggleSize = (e: React.MouseEvent) => {
@@ -73,12 +71,12 @@ const Card: React.FC<CardProps> = ({ data, onSizeChange }) => {
           group
           ${getBgColor(data.type)}
         `}
+        style={{ cursor: 'pointer' }}
         onMouseEnter={() => {
           setIsHovered(true);
-          setHoverText('');
-          setTimeout(() => setHoverText(getFeedbackText('card-hover', { title: data.title })), 10);
+          setTimeout(() => getFeedbackText('card-hover', { title: data.title }), 10);
         }}
-        onMouseLeave={() => { setIsHovered(false); setHoverText(''); }}
+        onMouseLeave={() => { setIsHovered(false); }}
       >
         <div className="relative w-full h-full">
           <Image
@@ -96,6 +94,7 @@ const Card: React.FC<CardProps> = ({ data, onSizeChange }) => {
                 onClick={handleToggleSize}
                 className="p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all
                   opacity-0 group-hover:opacity-100"
+                style={{ cursor: 'pointer' }}
                 aria-label={data.expanded ? "Shrink card" : "Expand card"}
               >
                 {data.expanded ? (
